@@ -7,7 +7,7 @@ Chat Secret Game è un progetto educativo sviluppato in HTML, CSS e JavaScript c
 Terminale interattivo
 Puzzle progressivi
 Sistema di livelli
-Comandi ispirati a Linux (help, ls, ls -a, ls -l, cat, pwd, whoami, clear)
+Comandi ispirati a Linux
 File nascosti e indizi distribuiti
 Effetti grafici in stile cyberpunk
 Animazioni e transizioni

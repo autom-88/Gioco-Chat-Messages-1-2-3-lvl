@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LEVEL 2 - LOCAL SYSTEM</title>
+
+<style>
+
+body {
+    background: #0a0a0a;
+    color: #00ff7f;
+    font-family: Consolas, monospace;
+    text-align: center;
+    padding: 30px;
+}
+
+.container {
+    width: 520px;
+    max-width: 95%;
+    margin: auto;
+    background: #111;
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid #00ff7f;
+    box-shadow: 0 0 20px rgba(0,255,120,0.2);
+}
+
+#terminal {
+    height: 280px;
+    overflow-y: auto;
+    background: black;
+    border: 1px solid #00ff7f;
+    padding: 10px;
+    margin-bottom: 15px;
+    text-align: left;
+    border-radius: 8px;
+    box-shadow: inset 0 0 15px rgba(0,255,127,0.2);
+}
+
+.line { margin: 3px 0; }
+.user { color: #00ffff; }
+.success { color: #00ff7f; font-weight: bold; }
+.error { color: #ff4444; }
+.system { color: #aaaaaa; }
+
+#scanBox {
+    display:none;
+    margin-top: 15px;
+}
+
+#progressBar {
+    width: 100%;
+    height: 18px;
+    border: 1px solid #00ff7f;
+    border-radius: 8px;
+    overflow: hidden;
+    background: black;
+}
+
+#progress {
+    width: 0%;
+    height: 100%;
+    background: #00ff7f;
+    transition: 0.2s linear;
+}
+
+#scanText {
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+#scanPercent {
+    margin-top: 5px;
+    color: #aaa;
+}
+
+input {
+    width: calc(100% - 24px);
+    padding: 12px;
+    background: black;
+    border: 1px solid #00ff7f;
+    color: #00ff7f;
+    border-radius: 8px;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    background: #00ff7f;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #00e676;
+}
+
+</style>
+</head>
+
+<body>
+
+<h1>🛠 LEVEL 2 LOCAL SYSTEM 🛠</h1>
+
+<div class="container">
+
+<div id="terminal">
+<div class="line system">SYSTEM ONLINE</div>
+<div class="line system">TYPE "Hello, World!"</div>
+</div>
+
+<div id="scanBox">
+    <div id="scanText">INITIALIZING...</div>
+    <div id="progressBar"><div id="progress"></div></div>
+    <div id="scanPercent">0%</div>
+</div>
+
+<input id="cmd" placeholder="Comando o codice..." autocomplete="off">
+<button onclick="run()">ESEGUI</button>
+
+</div>
+
+<script>
+
+const SECRET = atob("MDEwMQ==");
+const files = {
+
+"readme.txt":
+"Benvenuto operatore.\nSistema locale attivo.\nUsa help per i comandi.",
+
+"log.txt":
+"[LOG]\nAccess attempt 01\nAccess denied\nSystem stable.",
+
+"boot.sys":
+"[BOOT SEQUENCE]\nLoading kernel...\nOK",
+
+"users.db":
+"user: admin\nstatus: active\nuser: guest\nstatus: blocked",
+
+"access.log":
+"[ACCESS LOG]\n10:22 FAIL\n10:24 FAIL\n10:30 SUCCESS",
+
+"sysinfo.cfg":
+"OS: LOCAL_TERMINAL_V2\nSECURITY: LOW-MED\nMODE: SIMULATION",
+
+"error.log":
+"[ERROR]\n404 module missing\nretry failed\npatched",
+
+"cache.tmp":
+"temp_9921_x\ncache cleared\nrebuild queued",
+
+"network.map":
+"NODE_A -> NODE_B -> NODE_C\nLATENCY: 12ms",
+
+"decrypt.key":
+"----BEGIN KEY----\ASCII\n----END KEY----",
+
+"vault.dat":
+"ENC FILE\n█▓▒░▒▓█\nACCESS REQUIRED",
+
+"boot.dat":
+"Progress: 48 49 48 49",
+
+"process.list":
+"init.exe\nscan.exe\nterminal.exe\nlogger.exe",
+
+"history.log":
+"cmd: ls\ncmd: cat log.txt\ncmd: unknown",
+
+"security.protocol":
+"FIREWALL: ACTIVE\nINTRUSION DETECT: ON",
+
+"system.core":
+"CORE STABLE\nTHREADS: 4\nLOAD: 37%",
+
+"hidden.note":
+"You are being watched.\nDo not trust logs.",
+
+"fragment.aes":
+"ENCRYPTED BLOCK\n{7F:88:A1:22}",
+
+"backup.bak":
+"BACKUP CREATED 00:00\nRESTORE POINT OK",
+
+"trace.route":
+"USER_IP -> NODE_77 -> NODE_12 -> UNKNOWN"
+};
+
+function log(text, cls="system") {
+const t = document.getElementById("terminal");
+const d = document.createElement("div");
+d.className = "line " + cls;
+d.textContent = text;
+t.appendChild(d);
+t.scrollTop = t.scrollHeight;
+}
+
+function startScan() {
+
+document.getElementById("scanBox").style.display = "block";
+
+let bar = document.getElementById("progress");
+let text = document.getElementById("scanText");
+let percent = document.getElementById("scanPercent");
+
+let p = 0;
+
+const msg = [
+"INITIALIZING SCAN...",
+"CHECK FILE SYSTEM...",
+"DECRYPTING...",
+"BYPASS SECURITY...",
+"ACCESS GRANTED"
+];
+
+let i = setInterval(() => {
+
+p += Math.floor(Math.random()*7)+2;
+if(p > 100) p = 100;
+
+bar.style.width = p + "%";
+percent.textContent = p + "%";
+
+if(p < 20) text.textContent = msg[0];
+else if(p < 40) text.textContent = msg[1];
+else if(p < 60) text.textContent = msg[2];
+else if(p < 85) text.textContent = msg[3];
+else text.textContent = msg[4];
+
+if(p === 100) {
+clearInterval(i);
+setTimeout(() => {
+window.location.href = "page3.html";
+}, 1200);
+}
+
+}, 120);
+}
+
+function execute(cmd) {
+
+let args = cmd.trim().split(" ");
+let c = args[0];
+
+if(c === "help") {
+log("help | ls | cat <file> | clear");
+}
+
+else if(c === "ls") {
+Object.keys(files).forEach(f => log(f));
+}
+
+else if(c === "cat") {
+let f = args[1];
+if(!files[f]) return log("File non trovato","error");
+files[f].split("\n").forEach(l => log(l));
+}
+
+else if(c === "clear") {
+document.getElementById("terminal").innerHTML = "";
+log("SYSTEM RESET");
+}
+
+else if(cmd.trim() === SECRET) {
+log("ACCESS ACCEPTED","success");
+log("RUNNING SCAN...");
+startScan();
+return;
+}
+
+else {
+log("ACCESS DENIED","error");
+}
+
+}
+
+function run() {
+let inp = document.getElementById("cmd");
+let v = inp.value.trim();
+if(!v) return;
+log("> "+v,"user");
+execute(v);
+inp.value="";
+}
+
+document.getElementById("cmd")
+.addEventListener("keydown", e => {
+if(e.key === "Enter") run();
+});
+
+</script>
+
+</body>
+</html>

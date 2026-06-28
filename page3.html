@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LEVEL 3 - DETECTED</title>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+<style>
+
+body{
+    margin:0;
+    overflow:hidden;
+    background:black;
+    font-family: monospace;
+    color:#00ff7f;
+}
+
+#app{
+    position:relative;
+    width:100vw;
+    height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+div.matrix{
+    position:absolute;
+    color:black;
+    animation:fade 2s;
+}
+
+@keyframes fade{
+    0%{color:white;text-shadow:0 0 10px white;}
+    20%{color:#5f5;text-shadow:0 0 10px #5f5;}
+    100%{color:black;}
+}
+
+#terminal{
+    position:absolute;
+    bottom:20px;
+    left:50%;
+    transform:translateX(-50%);
+    width:420px;
+    height:160px;
+    overflow:auto;
+    border:1px solid #00ff7f;
+    background:black;
+    padding:8px;
+    font-size:12px;
+}
+
+#center{
+    text-align:center;
+}
+
+input{
+    margin-top:10px;
+    padding:10px;
+    width:220px;
+    background:black;
+    border:1px solid #00ff7f;
+    color:#00ff7f;
+    text-align:center;
+}
+
+button{
+    padding:10px 20px;
+    background:#00ff7f;
+    border:none;
+    cursor:pointer;
+    margin-top:10px;
+}
+
+button:hover{
+    background:#00e676;
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="app">
+
+    <div id="center">
+
+        <div>DETECTED THE NODE</div>
+
+        <input id="cmd" placeholder="command...">
+        <br>
+        <button onclick="execute()">EXECUTE</button>
+
+    </div>
+
+    <div id="terminal">SYSTEM READY<br>TYPE: help...</div>
+
+</div>
+
+<script>
+
+const files = {
+"readme.txt":"NODE ACTIVE",
+"system.log":"Ends with 35 100",
+"hint_01.log":"The node has four digit",
+"attack_vector.txt":"=10 =20 0101=35",
+"firewall.cfg":"config=100",
+"network.log":"Starts with 45 10",
+".crypto_guide":"Encryption transforms readable text into encoded text. Decryption restores the original message using the correct key.",
+".cipher.log":"Binary values are often represented using only 0 and 1. Search for repeating binary patterns.",
+".decoder.txt":"A valid key must match both the expected length and the required format.",
+".archive.dat":"Hint: Some messages become meaningful only after combining information from multiple files.",
+".secret.note":"Final rule: Read every clue before attempting authentication."
+};
+
+function prompt(cmd){
+    const t = document.getElementById("terminal");
+    t.innerHTML += "<br><span style='color:#00ff7f'>player@node3:~$</span> " + cmd;
+    t.scrollTop = t.scrollHeight;
+}
+
+function term(msg){
+    const t = document.getElementById("terminal");
+    t.innerHTML += "<br>" + msg;
+    t.scrollTop = t.scrollHeight;
+}
+
+const chars = ['1','0','0','1','0','1','0','1','0','1','0','1','0','1','0','1','0','1','0'];
+
+function matrix(){
+    setInterval(()=>{
+        let el = $("<div class='matrix' style='top:"+Math.random()*window.innerHeight+
+        "px;left:"+Math.random()*window.innerWidth+"px'>"+
+        chars[Math.floor(Math.random()*chars.length)]+"</div>");
+
+        $("body").append(el);
+        setTimeout(()=>el.remove(),1000);
+    },80);
+}
+function execute(){
+
+    let v = document.getElementById("cmd").value.trim();
+    if(!v) return;
+
+    prompt(v);
+
+    document.getElementById("cmd").value = "";
+
+    if(v === "help"){
+        term("help | ls | ls -l | cat <file> | pwd <password> | whoami | clear | test | check");
+        return;
+    }
+
+    if(v==="pwd"){
+
+    term("/home/r00t/level3");
+
+    return;
+
+    }
+
+    if(v==="whoami"){
+
+    term("root");
+
+    return;
+
+    }
+
+    if(v==="clear"){
+
+    document.getElementById("terminal").innerHTML =
+        "SYSTEM READY<br>TYPE: help";
+
+    return;
+
+    }
+
+    if(v === "ls -l"){
+
+    term("-rw-r--r-- root root  11 readme.txt");
+    term("-rw-r--r-- root root  12 system.log");
+    term("-rw-r--r-- root root  19 hint_01.log");
+    term("-rw-r--r-- root root  14 attack_vector.txt");
+    term("-rw-r--r-- root root  10 firewall.cfg");
+    term("-rw-r--r-- root root  13 network.log");
+
+    return;
+
+    }
+
+    if(v === "ls"){
+
+    Object.keys(files)
+        .filter(file => !file.startsWith("."))
+        .forEach(file => term(file));
+
+        return;
+    }
+
+    if(v === "ls -a"){
+
+    Object.keys(files).forEach(file => term(file));
+
+        return;
+    }
+
+    if(v.startsWith("cat ")){
+        let f = v.split(" ")[1];
+        term(files[f] || "FILE NOT FOUND");
+        return;
+    }
+
+    if(v==="check"){
+
+    term("SYSTEM CHECK... OK");
+
+    return;
+
+    }
+
+    if(v==="test"){
+
+    term("NODE VERIFIED");
+
+    return;
+
+    }
+
+    const n1 = 9 * 5;      // 45
+    const n2 = 5 * 2;      // 10
+    const n3 = 7 * 5;      // 35
+    const n4 = 25 * 4;     // 100
+
+    const secret = `${n1} ${n2} ${n3} ${n4}`;
+
+    if (v === secret) {
+
+    term("ACCESS GRANTED");
+    term("LOADING NEXT LEVEL...");
+
+    setTimeout(() => {
+        location.href = "page4.html";
+    }, 2000);
+
+    return;
+
+}
+}
+
+    document.getElementById("cmd").addEventListener("keydown",e=>{
+    if(e.key==="Enter") execute();
+
+});
+
+</script>
+
+</body>
+</html>

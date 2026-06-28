@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>LEVEL 3 - COMPLETED</title>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+<style>
+
+body{
+    margin:0;
+    overflow:hidden;
+    background:black;
+    font-family: monospace;
+}
+
+div.matrix{
+    position:absolute;
+    width:1em;
+    display:inline-block;
+    color:black;
+    animation-name:fade;
+    animation-duration:2s;
+}
+
+@keyframes fade{
+    0%{
+        color:white;
+        text-shadow:0 0 8px white;
+    }
+    15%{
+        color:#5f5;
+        text-shadow:0 0 8px #5f5;
+    }
+    100%{
+        color:black;
+        text-shadow:none;
+    }
+}
+
+#overlay{
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+    background:rgba(0,0,0,0.65);
+    color:#00ff7f;
+    text-align:center;
+}
+
+#box{
+    border:1px solid #00ff7f;
+    padding:30px;
+    border-radius:12px;
+    box-shadow:0 0 20px rgba(0,255,127,0.3);
+    background:#0a0a0a;
+}
+
+h1{
+    margin:0;
+    font-size:28px;
+    text-shadow:0 0 10px #00ff7f;
+}
+
+h2{
+    margin-top:10px;
+    font-size:16px;
+    color:#aaa;
+}
+
+.levels{
+    margin-top:20px;
+    text-align:left;
+    font-size:14px;
+}
+
+.levels span{
+    display:block;
+    margin:5px 0;
+}
+
+.completed{
+    color:#00ff7f;
+}
+
+.locked{
+    color:#555;
+}
+
+button{
+    margin-top:20px;
+    padding:10px 20px;
+    background:#00ff7f;
+    border:none;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#00e676;
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="overlay">
+
+    <div id="box">
+
+        <h1>🎉 CONGRATULATIONS 🎉</h1>
+        <h2>SYSTEM COMPLETED SUCCESSFULLY</h2>
+
+        <div class="levels">
+
+            <span class="completed">✔ LEVEL 1 - ACCESS FOUND</span>
+            <span class="completed">✔ LEVEL 2 - LOCAL SYSTEM BREACHED</span>
+            <span class="completed">✔ LEVEL 3 - DETECTED STABILIZED</span>
+
+        </div>
+
+        <button onclick="restart()">
+            RESTART SYSTEM
+        </button>
+
+    </div>
+
+</div>
+
+<script>
+
+const textStrip = ['0','1','0','1','0','1','0','1','0','1','0','1','0','1','0','1'];
+
+function matrixcol(){
+
+    let top = Math.floor(Math.random() * window.innerHeight);
+    let size = 10 + Math.random()*10;
+    let col = Math.floor(Math.random() * window.innerWidth);
+    let ms = 500 + Math.random()*1500;
+
+    let timer;
+
+    function drop(){
+
+        let char = textStrip[Math.floor(Math.random()*textStrip.length)];
+
+        let el = $("<div class='matrix' style='font-size:"+size+"px;top:"+top+"px;left:"+col+"px;animation-duration:"+(ms*2)+"ms'>"+char+"</div>");
+
+        $("body").append(el);
+
+        top += size;
+
+        setTimeout(()=>el.remove(), ms*1.5);
+
+        if(top > window.innerHeight){
+
+            top = 0;
+            col = Math.floor(Math.random() * window.innerWidth);
+            size = 10 + Math.random()*10;
+            ms = 500 + Math.random()*1500;
+
+            clearInterval(timer);
+            timer = setInterval(drop, ms/40);
+        }
+    }
+
+    timer = setInterval(drop, ms/40);
+}
+
+for(let i=0;i<25;i++){
+    matrixcol();
+}
+
+function restart(){
+    window.location.href = "index.html";
+}
+
+</script>
+
+</body>
+</html>

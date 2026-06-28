@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chat Secret Game</title>
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  
+<div>
+
+<h2>🔐 CHAT SECRET GAME 🔐</h2>
+
+<p>Trova la parola segreta per avanzare al livello 2.</p>  
+
+<button class="open-button" onclick="openForm()">Apri Chat</button>
+</div>
+
+<div class="chat-popup" id="myForm">
+
+  <form class="form-container" onsubmit="checkSecret(event)">
+
+    <h3 style="color:#00ff7f; text-align:center;">Chat Access</h3>
+
+    <textarea id="msg" placeholder="Scrivi comando..." required></textarea>
+
+    <button type="submit" class="btn">Esegui</button>
+    <button type="button" class="btn cancel" onclick="closeForm()">Chiudi</button>
+
+  </form>
+
+</div>
+
+<script>
+
+const _ = [97,112,114,105,49,50,51];
+const SECRET = _.map(x => String.fromCharCode(x)).join("");
+
+let log = JSON.parse(localStorage.getItem("gameLog")) || [];
+let sessionCount = 0;
+let downloaded = false;
+
+function openForm() {
+  document.getElementById("myForm").style.display = "block";
+}
+
+function closeForm() {
+  document.getElementById("myForm").style.display = "none";
+}
+
+function saveLog(input) {
+  log.push(input);
+  localStorage.setItem("gameLog", JSON.stringify(log));
+}
+
+function downloadTXT() {
+
+    let content = "=== GAME LOG ===\n\n";
+
+    log.forEach((item, i) => {
+        content += `${i + 1}. ${item}\n`;
+    });
+
+    content += `\nSECRET: ${SECRET}`;
+
+    const blob = new Blob([content], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "game-log.txt";
+
+    document.body.appendChild(a);
+    a.click();
+
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+
+function checkSecret(event) {
+  event.preventDefault();
+
+  const input = document.getElementById("msg").value.trim().toLowerCase();
+
+  console.log("INPUT:", input);
+
+  saveLog(input);
+  sessionCount++;
+
+  if (sessionCount === 10 && !downloaded) {
+    downloaded = true;
+    downloadTXT();
+  }
+
+  if (input === SECRET) {
+
+    console.log("ACCESSO CONCESSO");
+
+    closeForm();
+
+    document.body.style.transition = "0.5s";
+    document.body.style.filter = "blur(2px)";
+
+    setTimeout(() => {
+      window.location.href = "page2.html";
+    }, 800);
+
+    return;
+  }
+
+  document.getElementById("msg").value = "";
+}
+
+</script>
+
+</body>
+</html>
